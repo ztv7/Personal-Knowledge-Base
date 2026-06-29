@@ -4,3 +4,7 @@ __pycache__/
 *.pyc
 *.DS_Store
 chroma_db/
+uploads/
+*.egg-info/
+.pytest_cache/
+.claude/
