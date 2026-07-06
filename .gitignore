@@ -9,7 +9,3 @@ uploads/
 .pytest_cache/
 .claude/
 
-# 非项目文件
-resume.md
-job-hunting.md
-copy.txt
