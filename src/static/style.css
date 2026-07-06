@@ -34,7 +34,14 @@ html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Sego
 
 .sidebar-header { display: flex; justify-content: space-between; align-items: center; }
 .sidebar-header h2 { font-size: 18px; }
-#sidebar-toggle { background: none; border: 1px solid var(--text-sidebar); color: var(--text-sidebar); cursor: pointer; padding: 2px 8px; border-radius: 4px; font-size: 14px; }
+.sidebar-toggle-btn {
+  position: fixed; left: 280px; top: 12px; z-index: 100;
+  background: var(--bg-sidebar); border: 1px solid var(--text-sidebar);
+  color: var(--text-sidebar); cursor: pointer; width: 26px; height: 26px;
+  border-radius: 4px; font-size: 12px; display: flex; align-items: center;
+  justify-content: center; transition: left 0.3s; padding: 0;
+}
+.sidebar-toggle-btn.collapsed { left: 0; }
 
 .sidebar-section h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; opacity: 0.7; }
 

@@ -48,3 +48,29 @@ def decompose_question(question: str) -> List[dict]:
         return []
     except Exception:
         return []
+
+
+EXTRACT_ENTITIES_PROMPT = ChatPromptTemplate.from_messages([
+    ("system", """从前置答案中提取与当前子问题相关的关键实体和核心事实。
+仅输出 1-2 句精简摘要，不要复述完整内容，只保留对检索有帮助的关键词。
+例如：答案提到"A是X用于Y"，而当前子问题是"A的特点"，则摘要为"已知：A是X技术，用于Y领域。"。"""),
+    ("user", "前置答案：{prev_answer}\n当前子问题：{next_question}\n提取相关关键信息："),
+])
+
+
+def extract_key_context(prev_answer: str, next_question: str) -> str:
+    """从前置答案中提取与当前子问题相关的关键实体，用于精简检索 query"""
+    if not prev_answer.strip():
+        return next_question
+
+    llm = get_llm(temperature=0)
+    chain = EXTRACT_ENTITIES_PROMPT | llm | StrOutputParser()
+
+    try:
+        summary = chain.invoke({
+            "prev_answer": prev_answer[:2000],  # 截断过长答案
+            "next_question": next_question,
+        })
+        return f"{summary.strip()}\n{next_question}"
+    except Exception:
+        return f"{prev_answer[:500]}\n{next_question}"  # 降级：截断而非全量

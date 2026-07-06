@@ -11,7 +11,7 @@
   const uploadStatus = $('#upload-status');
   const fileList = $('#file-list');
   const btnExport = $('#btn-export');
-  const btnClear = $('#btn-clear');
+  const btnClear = $('#btn-clear-chat');
   const sidebarToggle = $('#sidebar-toggle');
   const sidebar = $('#sidebar');
   const btnSaveConfig = $('#btn-save-config');
@@ -38,7 +38,8 @@
   // ---- Sidebar toggle ----
   sidebarToggle.addEventListener('click', () => {
     sidebar.classList.toggle('collapsed');
-    sidebarToggle.textContent = sidebar.classList.contains('collapsed') ? '>' : '<';
+    sidebarToggle.classList.toggle('collapsed');
+    sidebarToggle.textContent = sidebar.classList.contains('collapsed') ? '▶' : '◀';
   });
 
   // ---- File upload ----

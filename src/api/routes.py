@@ -12,7 +12,7 @@ from src.api.errors import EmptyQueryError
 from src.store.vector_store import VectorStore
 from src.loader.dispatcher import load_and_chunk
 from src.engine.rewriter import rewrite_query
-from src.engine.decomposer import decompose_question
+from src.engine.decomposer import decompose_question, extract_key_context
 from src.engine.retriever import retrieve, format_context
 from src.engine.generator import generate_stream, generate_sync
 from src.chat.manager import ChatSessionManager
@@ -191,11 +191,13 @@ async def _multi_hop_qa_stream(
             sub_q = sq["question"]
             depends = sq.get("depends_on", [])
 
-            # 融合前置答案作为检索上下文
+            # 融合前置答案作为检索上下文（提取关键实体，不注入全量）
             enriched_query = sub_q
             for dep_step in depends:
                 if dep_step in sub_answers:
-                    enriched_query = f"{sub_answers[dep_step]}\n{sub_q}"
+                    enriched_query = extract_key_context(
+                        sub_answers[dep_step], sub_q
+                    )
 
             # 检索
             retrieved = retrieve(store, enriched_query)
